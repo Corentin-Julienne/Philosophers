@@ -27,6 +27,8 @@ static int	is_pos_number(const char *str)
 			error++;
 		i++;
 	}
+	if (ft_strlen(str) == 1 && str[0] == '0')
+		error++;
 	if (error > 0)
 		return (0);
 	return (1);
