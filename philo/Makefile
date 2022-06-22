@@ -27,7 +27,7 @@ OBJS = $(SRCS:.c=.o)
 INCLUDE_PATH = .
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_PATH) -g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_PATH)
 
 RM = rm -f
 

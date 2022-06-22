@@ -16,8 +16,17 @@ void	*philo_routine(void *arg)
 {
 	t_philo			*philo;
 	int				res_func;
+	long long		is_started;
 
 	philo = (t_philo *)arg;
+	is_started = -1;
+	while (is_started == -1)
+	{
+		pthread_mutex_lock(&philo->sim->check_start);
+		is_started = philo->sim->start_sim;
+		pthread_mutex_unlock(&philo->sim->check_start);
+		usleep(50);
+	}
 	pthread_mutex_lock(&philo->sim->check_phi_eat);
 	philo->last_eat = get_time_now();
 	pthread_mutex_unlock(&philo->sim->check_phi_eat);

@@ -136,6 +136,7 @@ int	init_sim_struct(t_sim *sim, char **argv, int argc)
 		sim->win_cond = -1;
 	sim->time_eaten = 0;
 	sim->endgame = 0;
+	sim->start_sim = -1;
 	sim->philos = NULL;
 	sim->forks = NULL;
 	sim->philos = init_philosophers(sim);

@@ -33,7 +33,9 @@ static void	print_msg(int id, int msg_type, t_sim *sim)
 		msg = "died\n";
 	else
 		msg = "has taken a fork\n";
+	pthread_mutex_lock(&sim->check_start);
 	time = get_time_now() - sim->start_sim;
+	pthread_mutex_unlock(&sim->check_start);
 	printf("%lli %i %s", time, id, msg);
 }
 
