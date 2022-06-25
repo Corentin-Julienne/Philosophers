@@ -29,6 +29,7 @@ so he is starving to death. Sad. */
 static int	die_alone(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
+	display_msg(philo->id, FORK, philo->sim);
 	while (is_dead(philo->last_eat, philo->sim->tt_die) == 0)
 		usleep(50);
 	display_msg(1, DEAD, philo->sim);
