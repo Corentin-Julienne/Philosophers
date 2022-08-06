@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 17:00:25 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 16:57:40 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:59:53 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int	die_alone(t_philo *philo)
 	display_msg(philo->id, FORK, philo->sim);
 	while (is_dead(philo->last_eat, philo->sim->tt_die) == 0)
 		usleep(50);
-	display_msg(1, DEAD, philo->sim);
 	pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 15:11:44 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 17:21:02 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:15:17 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	init_mutexes_2(t_sim *sim)
 {
 	pthread_mutex_t		check_start;
 	pthread_mutex_t		check_phi_eat;
-	pthread_mutex_t		check_static;
 
 	if (pthread_mutex_init(&check_start, NULL) != 0)
 		return (1);
@@ -25,15 +24,8 @@ static int	init_mutexes_2(t_sim *sim)
 		pthread_mutex_destroy(&check_start);
 		return (2);
 	}
-	if (pthread_mutex_init(&check_static, NULL) != 0)
-	{
-		pthread_mutex_destroy(&check_start);
-		pthread_mutex_destroy(&check_phi_eat);
-		return (3);
-	}
 	sim->check_start = check_start;
 	sim->check_phi_eat = check_phi_eat;
-	sim->check_static = check_static;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:48 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 17:20:30 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:14:51 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	mutexes_elimination(t_sim *sim, int code)
 	{
 		pthread_mutex_destroy(&sim->check_start);
 		pthread_mutex_destroy(&sim->check_phi_eat);
-		pthread_mutex_destroy(&sim->check_static);
 	}
 }
 

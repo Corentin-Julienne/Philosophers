@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:49:12 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 17:44:55 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:14:09 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_sim
 	pthread_mutex_t		add_meal_count;
 	pthread_mutex_t		check_endgame;
 	pthread_mutex_t		check_phi_eat;
-	pthread_mutex_t		check_static;
 	pthread_mutex_t		check_start;
 }						t_sim;
 

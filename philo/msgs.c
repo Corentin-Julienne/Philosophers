@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:46 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 13:11:42 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:38:44 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,18 @@ int	display_error_msg(const char *err_specific)
 
 static void	print_msg(int id, int msg_type, t_sim *sim)
 {
+	int				endgame_cpy;
 	char			*msg;
 	long long		time;
 
+	if (msg_type != DEAD && msg_type != VICTORY)
+	{
+		pthread_mutex_lock(&sim->check_endgame);
+		endgame_cpy = sim->endgame;
+		pthread_mutex_unlock(&sim->check_endgame);
+		if (endgame_cpy != 0)
+			return ;
+	}
 	if (msg_type == THINKING)
 		msg = "is thinking\n";
 	else if (msg_type == EATING)
@@ -54,28 +63,16 @@ int	handle_std_case(int id, int msg_type, t_sim *sim)
 
 int	display_msg(int id, int msg_type, t_sim *sim)
 {
-	static int		stop = 0;
-	int				rtn;
-
-	pthread_mutex_lock(&sim->check_static);
-	if (stop != 0)
-	{
-		rtn = stop;
-		pthread_mutex_unlock(&sim->check_static);
-		return (rtn);
-	}
-	pthread_mutex_unlock(&sim->check_static);
 	pthread_mutex_lock(&sim->write_msg);
 	if (msg_type == DEAD || msg_type == VICTORY)
 	{
-		pthread_mutex_lock(&sim->check_static);
-		stop++;
-		rtn = stop;
-		pthread_mutex_unlock(&sim->check_static);
+		pthread_mutex_lock(&sim->check_endgame);
+		sim->endgame++;
+		pthread_mutex_unlock(&sim->check_endgame);
 		if (msg_type == DEAD)
 			print_msg(id, msg_type, sim);
 		pthread_mutex_unlock(&sim->write_msg);
-		return (rtn);
+		return (1);
 	}
 	return (handle_std_case(id, msg_type, sim));
 }

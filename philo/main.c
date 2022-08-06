@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:50 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 18:23:47 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:31:18 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 static void	sim_out(t_sim *sim, int i, int type)
 {
-	pthread_mutex_lock(&sim->check_endgame);
-	sim->endgame++;
-	pthread_mutex_unlock(&sim->check_endgame);
 	if (type == DEAD)
 		display_msg(sim->philos[i].id, DEAD, sim);
 	else
