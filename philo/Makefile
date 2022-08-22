@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/21 12:49:19 by cjulienn          #+#    #+#              #
-#    Updated: 2022/08/06 17:01:59 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/08/23 00:16:10 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJS = $(SRCS:.c=.o)
 INCLUDE_PATH = .
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_PATH) # -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_PATH)  #-fsanitize=thread
 
 RM = rm -f
 
