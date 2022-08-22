@@ -6,13 +6,14 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/21 12:49:19 by cjulienn          #+#    #+#              #
-#    Updated: 2022/08/22 20:20:52 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/08/22 23:16:20 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SRCS = ./actions.c \
+	   ./algos.c \
 	   ./check_args.c \
 	   ./free.c \
 	   ./init_structs.c \

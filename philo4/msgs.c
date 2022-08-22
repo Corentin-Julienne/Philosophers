@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:46 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/08/06 16:38:44 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/22 22:59:47 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@ int	display_error_msg(const char *err_specific)
 {
 	printf("%s", err_specific);
 	return (1);
+}
+
+static char	*select_msg(int msg_type)
+{
+	char	*msg;
+
+	if (msg_type == THINKING)
+		msg = "is thinking\n";
+	else if (msg_type == EATING)
+		msg = "is eating\n";
+	else if (msg_type == SLEEPING)
+		msg = "is sleeping\n";
+	else if (msg_type == DEAD)
+		msg = "died\n";
+	else
+		msg = "has taken a fork\n";
+	return (msg);
 }
 
 static void	print_msg(int id, int msg_type, t_sim *sim)
@@ -32,16 +49,7 @@ static void	print_msg(int id, int msg_type, t_sim *sim)
 		if (endgame_cpy != 0)
 			return ;
 	}
-	if (msg_type == THINKING)
-		msg = "is thinking\n";
-	else if (msg_type == EATING)
-		msg = "is eating\n";
-	else if (msg_type == SLEEPING)
-		msg = "is sleeping\n";
-	else if (msg_type == DEAD)
-		msg = "died\n";
-	else
-		msg = "has taken a fork\n";
+	msg = select_msg(msg_type);
 	pthread_mutex_lock(&sim->check_start);
 	time = get_time_now() - sim->start_sim;
 	pthread_mutex_unlock(&sim->check_start);

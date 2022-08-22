@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 17:00:25 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/08/22 20:06:08 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/22 23:17:50 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,16 @@ static int	die_alone(t_philo *philo)
 static int	request_forks(t_philo *philo)
 {
 	int		is_sim_over;
+	int		res;
 
 	pthread_mutex_lock(&philo->sim->check_endgame);
 	is_sim_over = philo->sim->endgame;
 	pthread_mutex_unlock(&philo->sim->check_endgame);
-	if (!is_sim_over)
-	{
-		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
-		display_msg(philo->id, FORK, philo->sim);
-		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
-		display_msg(philo->id, FORK, philo->sim);
-	}
+	if (philo->sim->nb_philo % 2 == 0)
+		res = case_even(is_sim_over, philo);
 	else
+		res = case_odd(is_sim_over, philo);
+	if (res)
 		return (1);
 	display_msg(philo->id, EATING, philo->sim);
 	return (0);
@@ -72,7 +70,7 @@ static int	eating_process(t_philo *philo)
 	if (custom_usleep(philo->sim->tt_eat, philo->sim) == 1)
 		return (release_fork_case_endsim(philo));
 	philo->meal_num++;
-	if ((philo->id) % 2 == 0)
+	if ((philo->id - 1) % 2 == 0)
 	{
 		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
 		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
