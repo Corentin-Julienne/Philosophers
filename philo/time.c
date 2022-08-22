@@ -6,11 +6,29 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:43 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 18:13:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/23 00:08:14 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+// void	anti_deadlock_algo(t_philo *philo)
+// {
+// 	if (philo->sim->nb_philo % 2 != 0)
+// 	{
+// 		if (philo->sim->nb_philo == 1)
+// 			return ;
+// 		if ((philo->id - 1) == philo->sim->nb_philo)
+// 		{
+// 			if (philo->sim->tt_eat * 2 < philo->sim->tt_die)
+// 				custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+// 			return ;
+// 		}
+// 		if ((philo->id - 1) % 2 != 0
+// 			&& philo->sim->tt_eat < philo->sim->tt_die)
+// 			custom_usleep(philo->sim->tt_eat, philo->sim);
+// 	}
+// }
 
 /* this function is used in order to prevent all philosophers
 to take the right forks in the same time and
@@ -21,16 +39,21 @@ void	anti_deadlock_algo(t_philo *philo)
 	if (philo->sim->nb_philo % 2 == 0)
 	{
 		if ((philo->id - 1) % 2 != 0)
+		{
+			display_msg(philo->id, THINKING, philo->sim);
 			custom_usleep(philo->sim->tt_eat, philo->sim);
+		}	
 	}
 	else
 	{
 		if (philo->sim->nb_philo == 1)
 			return ;
-		if ((philo->id - 1) % 2 != 0)
+		if ((philo->id - 1) % 2 != 0
+			&& philo->sim->tt_eat < philo->sim->tt_die)
+		{
+			display_msg(philo->id, THINKING, philo->sim);
 			custom_usleep(philo->sim->tt_eat, philo->sim);
-		if ((philo->id - 1) == philo->sim->nb_philo)
-			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+		}
 	}
 }
 
