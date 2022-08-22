@@ -6,12 +6,9 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 17:00:25 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/08/22 16:48:21 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/22 19:51:51 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// if (philo_number + turn_number) % 2 -> take left then right
-// else -> take right then left
 
 #include "philosophers.h"
 
@@ -44,33 +41,6 @@ static int	die_alone(t_philo *philo)
 => display msg "has taken a fork"
 => realease forks if display msg problem */
 
-// static int	request_forks(t_philo *philo)
-// {
-// 	int		is_sim_over;
-
-// 	pthread_mutex_lock(&philo->sim->check_endgame);
-// 	is_sim_over = philo->sim->endgame;
-// 	pthread_mutex_unlock(&philo->sim->check_endgame);
-// 	if (!is_sim_over && (philo->id - 1) % 2 == 0)
-// 	{
-// 		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
-// 		display_msg(philo->id, FORK, philo->sim);
-// 		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
-// 		display_msg(philo->id, FORK, philo->sim);
-// 	}
-// 	else if (!is_sim_over && (philo->id - 1) % 2 != 0)
-// 	{
-// 		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
-// 		display_msg(philo->id, FORK, philo->sim);
-// 		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
-// 		display_msg(philo->id, FORK, philo->sim);
-// 	}
-// 	else
-// 		return (1);
-// 	display_msg(philo->id, EATING, philo->sim);
-// 	return (0);
-// }
-
 static int	request_forks(t_philo *philo)
 {
 	int		is_sim_over;
@@ -78,14 +48,21 @@ static int	request_forks(t_philo *philo)
 	pthread_mutex_lock(&philo->sim->check_endgame);
 	is_sim_over = philo->sim->endgame;
 	pthread_mutex_unlock(&philo->sim->check_endgame);
-	if (!is_sim_over && (philo->id - 1) != philo->sim->nb_philo - 1)
+	if (!is_sim_over && philo->sim->nb_philo % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
 		display_msg(philo->id, FORK, philo->sim);
 		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
 		display_msg(philo->id, FORK, philo->sim);
 	}
-	else if (!is_sim_over && (philo->id - 1) == philo->sim->nb_philo - 1)
+	else if (!is_sim_over && (philo->id) % 2 == 0)
+	{
+		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
+		display_msg(philo->id, FORK, philo->sim);
+		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
+		display_msg(philo->id, FORK, philo->sim);
+	}
+	else if (!is_sim_over && (philo->id) % 2 != 0)
 	{
 		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
 		display_msg(philo->id, FORK, philo->sim);
@@ -106,35 +83,6 @@ static int	request_forks(t_philo *philo)
 5) increment victory condition on one philo if philo has eaten enough
 */
 
-// static int	eating_process(t_philo *philo)
-// {
-// 	if (request_forks(philo) != 0)
-// 		return (1);
-// 	pthread_mutex_lock(&philo->sim->check_phi_eat);
-// 	philo->last_eat = get_time_now();
-// 	pthread_mutex_unlock(&philo->sim->check_phi_eat);
-// 	if (custom_usleep(philo->sim->tt_eat, philo->sim) == 1)
-// 		return (release_fork_case_endsim(philo));
-// 	philo->meal_num++;
-// 	if ((philo->id - 1) % 2 == 0)
-// 	{
-// 		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
-// 		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
-// 	}
-// 	else
-// 	{
-// 		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
-// 		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
-// 	}
-// 	if (philo->meal_num == philo->sim->win_cond)
-// 	{
-// 		pthread_mutex_lock(&philo->sim->add_meal_count);
-// 		philo->sim->time_eaten++;
-// 		pthread_mutex_unlock(&philo->sim->add_meal_count);
-// 	}
-// 	return (0);
-// }
-
 static int	eating_process(t_philo *philo)
 {
 	if (request_forks(philo) != 0)
@@ -145,7 +93,7 @@ static int	eating_process(t_philo *philo)
 	if (custom_usleep(philo->sim->tt_eat, philo->sim) == 1)
 		return (release_fork_case_endsim(philo));
 	philo->meal_num++;
-	if ((philo->id - 1) == philo->sim->nb_philo - 1)
+	if ((philo->id) % 2 == 0)
 	{
 		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
 		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
@@ -177,6 +125,14 @@ int	eat_sleep_think_pattern(t_philo *philo)
 {
 	if (philo->sim->nb_philo == 1)
 		return (die_alone(philo));
+	if (philo->sim->nb_philo % 2 != 0 && (philo->id) % 2 != 0)
+	{
+		display_msg(philo->id, THINKING, philo->sim);
+		if ((philo->id) % 2 != 0 && philo->id != philo->sim->nb_philo)
+			custom_usleep(philo->sim->tt_eat, philo->sim);
+		if (philo->id == philo->sim->nb_philo)
+			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+	}
 	if (eating_process(philo) == 1)
 		return (1);
 	display_msg(philo->id, SLEEPING, philo->sim);
@@ -185,3 +141,21 @@ int	eat_sleep_think_pattern(t_philo *philo)
 	display_msg(philo->id, THINKING, philo->sim);
 	return (0);
 }
+
+// void	anti_deadlock_algo(t_philo *philo)
+// {
+// 	if (philo->sim->nb_philo % 2 == 0)
+// 	{
+// 		if ((philo->id - 1) % 2 != 0)
+// 			custom_usleep(philo->sim->tt_eat, philo->sim);
+// 	}
+// 	else
+// 	{
+// 		if (philo->sim->nb_philo == 1)
+// 			return ;
+// 		if ((philo->id - 1) % 2 != 0)
+// 			custom_usleep(philo->sim->tt_eat, philo->sim);
+// 		if ((philo->id - 1) == philo->sim->nb_philo)
+// 			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+// 	}
+// }

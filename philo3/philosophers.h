@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:49:12 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/08/22 15:44:07 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/22 18:55:34 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_philo
 
 /* actions.c */
 int					eat_sleep_think_pattern(t_philo *philo);
+/* algos.c */
+
 /* check_args.c */
 int					check_args_validity(int argc, char **argv);
 /* free.c */
@@ -75,7 +77,6 @@ int					display_msg(int id, int msg_type, t_sim *sim);
 /* routines */
 void				*philo_routine(void *arg);
 /* time.c */
-void				anti_deadlock_algo(t_philo *philo); // erase that after
 int					is_dead(long long last_eat, long long tt_die);
 int					custom_usleep(long long time, t_sim *sim);
 long long			get_time_now(void);

@@ -6,29 +6,38 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:43 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/08/22 15:57:39 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/08/22 20:17:32 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// void	anti_deadlock_algo(t_philo *philo) // erase that after
-// {
-// 	if (philo->sim->nb_philo % 2 == 0)
-// 	{
-// 		if ((philo->id - 1) % 2 != 0)
-// 			custom_usleep((philo->sim->tt_eat / 2), philo->sim);
-// 	}
-// 	else
-// 	{
-// 		if (philo->sim->nb_philo == 1)
-// 			return ;
-// 		if ((philo->id - 1) % 2 != 0)
-// 			custom_usleep((philo->sim->tt_eat / 2), philo->sim);
-// 		// if ((philo->id - 1) == philo->sim->nb_philo)
-// 		// 	custom_usleep(philo->sim->tt_eat, philo->sim);
-// 	}
-// }
+/* this function is used in order to prevent all philosophers
+to take the right forks in the same time and
+then causing a deadlock  */
+
+void	anti_deadlock_algo(t_philo *philo)
+{
+	if (philo->sim->nb_philo % 2 == 0)
+	{
+		if ((philo->id - 1) % 2 != 0)
+			custom_usleep(philo->sim->tt_eat, philo->sim);
+	}
+	else
+	{
+		if (philo->sim->nb_philo == 1)
+			return ;
+		if ((philo->id - 1) == philo->sim->nb_philo)
+		{
+			if (philo->sim->tt_eat * 2 < philo->sim->tt_die)
+				custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+			return ;
+		}
+		if ((philo->id - 1) % 2 != 0
+			&& philo->sim->tt_eat < philo->sim->tt_die)
+			custom_usleep(philo->sim->tt_eat, philo->sim);
+	}
+}
 
 int	is_dead(long long last_eat, long long tt_die)
 {
